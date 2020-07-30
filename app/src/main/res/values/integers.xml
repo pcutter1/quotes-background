@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <integer name="mru_size_pref_min">5</integer>
+  <integer name="mru_size_pref_max">100</integer>
+  <integer name="mru_size_pref_default">10</integer>
+  <integer name="mru_size_pref_increment">5</integer>
+
+  <integer name="poll_interval_pref_min">0</integer>
+  <integer name="poll_interval_pref_max">60</integer>
+  <integer name="poll_interval_pref_default">15</integer>
+  <integer name="poll_interval_pref_increment">5</integer>
+
+</resources>

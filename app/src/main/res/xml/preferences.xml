@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <SeekBarPreference
+    android:defaultValue="@integer/mru_size_pref_default"
+    android:icon="@drawable/ic_archive"
+    android:key="@string/mru_size_pref_key"
+    android:max="@integer/mru_size_pref_max"
+    android:summary="@string/mru_size_pref_summary"
+    android:title="@string/mru_size_pref_title"
+    app:min="@integer/mru_size_pref_min"
+    app:seekBarIncrement="@integer/mru_size_pref_increment"
+    app:showSeekBarValue="true"/>
+
+  <SeekBarPreference
+    android:defaultValue="@integer/poll_interval_pref_default"
+    android:icon="@drawable/ic_timer"
+    android:key="@string/poll_interval_pref_key"
+    android:max="@integer/poll_interval_pref_max"
+    android:summary="@string/poll_interval_pref_summary"
+    android:title="@string/poll_interval_pref_title"
+    app:min="@integer/poll_interval_pref_min"
+    app:seekBarIncrement="@integer/poll_interval_pref_increment"
+    app:showSeekBarValue="true"/>
+
+</PreferenceScreen>

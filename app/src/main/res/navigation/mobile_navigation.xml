@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/mobile_navigation"
+  app:startDestination="@+id/navigation_home">
+
+  <fragment
+    android:id="@+id/navigation_home"
+    android:label="@string/app_bar_title_home"
+    android:name="edu.cnm.deepdive.quotesbackground.controller.HomeFragment"
+    tools:layout="@layout/fragment_home"/>
+
+  <fragment
+    android:id="@+id/navigation_local"
+    android:label="@string/app_bar_title_local"
+    android:name="edu.cnm.deepdive.quotesbackground.controller.LocalFragment"
+    tools:layout="@layout/fragment_local"/>
+
+  <fragment
+    android:id="@+id/navigation_remote"
+    android:label="@string/app_bar_title_remote"
+    android:name="edu.cnm.deepdive.quotesbackground.controller.RemoteFragment"
+    tools:layout="@layout/fragment_remote"/>
+
+  <fragment
+    android:id="@+id/navigation_settings"
+    android:label="@string/app_bar_title_settings"
+    android:name="edu.cnm.deepdive.quotesbackground.controller.SettingsFragment"/>
+
+</navigation>

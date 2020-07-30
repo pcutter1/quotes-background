@@ -1,0 +1,27 @@
+<resources>
+
+  <string name="app_name">Quotes Background</string>
+
+  <string name="nav_title_home">Home</string>
+  <string name="nav_title_local">Local</string>
+  <string name="nav_title_remote">Remote</string>
+  <string name="nav_title_settings">Settings</string>
+
+  <string name="app_bar_title_home">Quotes Home</string>
+  <string name="app_bar_title_local">Local Quotes</string>
+  <string name="app_bar_title_remote">Remote Quotes</string>
+  <string name="app_bar_title_settings">Quotes Settings</string>
+
+  <string name="mru_size_pref_key">mru_size_pref</string>
+  <string name="mru_size_pref_title">Keep most recent</string>
+  <string name="mru_size_pref_summary">Number of quotes from remote source that will be stored locally.</string>
+
+  <string name="poll_interval_pref_key">polling_interval_pref</string>
+  <string name="poll_interval_pref_title">Polling interval</string>
+  <string name="poll_interval_pref_summary">Number of minutes between quote retrievals from remote source.</string>
+
+  <string name="citation_format">&#x2014;%s</string>
+  <string name="intro_text"><![CDATA[A simple app that demonstrates view binding; consumption of an external service (with Retrofit and Gson); local persistence of relational data (with Room & SQlite); reactive streams for asynchronous processing (with RxJava); and SharedPreferences with PreferenceScreen for editing and accessing user preferences.]]></string>
+  <string name="anonymous_citation">(anonymous)</string>
+
+</resources>
