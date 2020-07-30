@@ -16,11 +16,18 @@
 package edu.cnm.deepdive.quotesbackground;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import androidx.preference.PreferenceManager;
 import com.facebook.stetho.Stetho;
+import edu.cnm.deepdive.quotesbackground.service.PeriodicUpdateService;
 import edu.cnm.deepdive.quotesbackground.service.QuoteDatabase;
+import edu.cnm.deepdive.quotesbackground.service.QuoteRepository;
 import io.reactivex.schedulers.Schedulers;
 
-public class QuotesBackgroundApplication extends Application {
+public class QuotesBackgroundApplication extends Application
+    implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+  private int pollingInterval = 0;
 
   @Override
   public void onCreate() {
@@ -29,7 +36,27 @@ public class QuotesBackgroundApplication extends Application {
     QuoteDatabase.getInstance().getQuoteDao().delete()
         .subscribeOn(Schedulers.io())
         .subscribe();
+    QuoteRepository.setContext(this);
+    handlePollingIntervalChange(PreferenceManager.getDefaultSharedPreferences(this));
     Stetho.initializeWithDefaults(this);
+  }
+
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    if (key.equals(getString(R.string.poll_interval_pref_key))) {
+      handlePollingIntervalChange(sharedPreferences);
+    }
+  }
+
+  private void handlePollingIntervalChange(SharedPreferences preferences) {
+    int newPollingInterval = preferences.getInt(getString(R.string.poll_interval_pref_key),
+        getResources().getInteger(R.integer.poll_interval_pref_default));
+    if (newPollingInterval != pollingInterval) {
+      if (newPollingInterval != 0) {
+        PeriodicUpdateService.schedule(this);
+      }
+      pollingInterval = newPollingInterval;
+    }
   }
 
 }
