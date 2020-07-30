@@ -37,9 +37,6 @@ android {
         targetCompatibility = 1.8
     }
 
-    buildFeatures {
-        viewBinding true
-    }
 
 }
 
