@@ -78,6 +78,11 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
 
+    // WorkManager (deferred background tasks) with ReactiveX integration
+    def work_version = "2.4.0"
+    implementation "androidx.work:work-runtime:$work_version"
+    implementation "androidx.work:work-rxjava2:$work_version"
+
     // Gson (Google JSON parser)
     implementation 'com.google.code.gson:gson:2.8.6'
 

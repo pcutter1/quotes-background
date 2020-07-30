@@ -9,6 +9,6 @@
   <integer name="poll_interval_pref_min">0</integer>
   <integer name="poll_interval_pref_max">60</integer>
   <integer name="poll_interval_pref_default">15</integer>
-  <integer name="poll_interval_pref_increment">5</integer>
+  <integer name="poll_interval_pref_increment">1</integer>
 
 </resources>

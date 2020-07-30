@@ -69,7 +69,7 @@ public interface QuoteDao {
   @Query("SELECT * FROM Quote ORDER BY text")
   LiveData<List<Quote>> selectAllOrderByText();
 
-  @Query("SELECT * FROM Quote WHERE author LIKE :filter OR text LIKE :filter ORDER BY author")
+  @Query("SELECT * FROM Quote WHERE author LIKE :filter OR text LIKE :filter ORDER BY text")
   LiveData<List<Quote>> selectAllByAuthorLikeOrTextLikeOrderByText(String filter);
 
   @Query("SELECT * FROM Quote ORDER BY created DESC LIMIT 1 OFFSET 0")

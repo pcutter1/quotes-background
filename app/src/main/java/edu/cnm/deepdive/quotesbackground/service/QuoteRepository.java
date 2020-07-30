@@ -15,6 +15,7 @@
  */
 package edu.cnm.deepdive.quotesbackground.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.lifecycle.LiveData;
@@ -24,38 +25,38 @@ import edu.cnm.deepdive.quotesbackground.model.dao.QuoteDao;
 import edu.cnm.deepdive.quotesbackground.model.entity.Quote;
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class QuoteRepository implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class QuoteRepository {
 
   private static final String LIKE_PATTERN = "%%%s%%";
   private static final int MAX_NETWORK_THREADS = 4;
 
-  private final Context context;
+  @SuppressLint("StaticFieldLeak")
+  private static Context context;
+
   private final QuoteDao quoteDao;
   private final ForismaticService forismaticService;
   private final ExecutorService networkPool;
   private final String mruSizePrefKey;
-  private int mruSize;
 
-  public QuoteRepository(Context context) {
-    this.context = context;
+  private QuoteRepository() {
     quoteDao = QuoteDatabase.getInstance().getQuoteDao();
     forismaticService = ForismaticService.getInstance();
     networkPool = Executors.newFixedThreadPool(MAX_NETWORK_THREADS);
     mruSizePrefKey = context.getString(R.string.mru_size_pref_key);
-    setupPreferences();
   }
 
-  @Override
-  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    if (key.equals(mruSizePrefKey)) {
-      mruSize = sharedPreferences.getInt(mruSizePrefKey,
-          context.getResources().getInteger(R.integer.mru_size_pref_default));
-    }
+  public static void setContext(Context context) {
+    QuoteRepository.context = context;
+  }
+
+  public static QuoteRepository getInstance() {
+    return InstanceHolder.INSTANCE;
   }
 
   public LiveData<List<Quote>> list() {
@@ -85,7 +86,16 @@ public class QuoteRepository implements SharedPreferences.OnSharedPreferenceChan
     return forismaticService.get()
         .subscribeOn(Schedulers.from(networkPool))
         .flatMapCompletable(this::save)
-        .andThen(Completable.fromSingle(quoteDao.deleteLru(mruSize)));
+        .andThen(
+            Completable.fromSingle((observer) -> {
+              SharedPreferences preferences = PreferenceManager
+                  .getDefaultSharedPreferences(context);
+              int mruSize = preferences.getInt(mruSizePrefKey,
+                  context.getResources().getInteger(R.integer.mru_size_pref_default));
+              quoteDao.deleteLru(mruSize)
+                  .subscribe(observer);
+            })
+        );
   }
 
   public Completable save(Quote quote) {
@@ -106,10 +116,10 @@ public class QuoteRepository implements SharedPreferences.OnSharedPreferenceChan
         .subscribeOn(Schedulers.io());
   }
 
-  private void setupPreferences() {
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-    preferences.registerOnSharedPreferenceChangeListener(this);
-    onSharedPreferenceChanged(preferences, mruSizePrefKey);
+  private static class InstanceHolder {
+
+    private static final QuoteRepository INSTANCE = new QuoteRepository();
+
   }
 
 }
