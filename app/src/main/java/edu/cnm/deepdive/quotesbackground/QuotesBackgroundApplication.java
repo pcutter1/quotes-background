@@ -17,6 +17,7 @@ package edu.cnm.deepdive.quotesbackground;
 
 import android.app.Application;
 import com.facebook.stetho.Stetho;
+import edu.cnm.deepdive.quotesbackground.service.PeriodicUpdateService;
 import edu.cnm.deepdive.quotesbackground.service.QuoteDatabase;
 import edu.cnm.deepdive.quotesbackground.service.QuoteRepository;
 import io.reactivex.schedulers.Schedulers;
@@ -31,6 +32,8 @@ public class QuotesBackgroundApplication extends Application {
         .subscribeOn(Schedulers.io())
         .subscribe();
     QuoteRepository.setContext(this);
+    PeriodicUpdateService.setContext(this);
+    PeriodicUpdateService.getInstance().schedule();
     Stetho.initializeWithDefaults(this);
   }
 

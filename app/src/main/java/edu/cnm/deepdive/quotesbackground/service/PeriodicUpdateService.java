@@ -14,7 +14,8 @@ import edu.cnm.deepdive.quotesbackground.R;
 import io.reactivex.Single;
 import java.util.concurrent.TimeUnit;
 
-public class PeriodicUpdateService {
+public class PeriodicUpdateService
+    implements SharedPreferences.OnSharedPreferenceChangeListener {
 
   @SuppressLint("StaticFieldLeak")
   private static Context context;
@@ -31,6 +32,7 @@ public class PeriodicUpdateService {
     pollingIntervalPrefKey = context.getString(R.string.poll_interval_pref_key);
     defaultPollingInterval = context.getResources().getInteger(R.integer.poll_interval_pref_default);
     preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    preferences.registerOnSharedPreferenceChangeListener(this);
   }
 
   public static void setContext(Context context) {
@@ -51,6 +53,13 @@ public class PeriodicUpdateService {
     }
   }
 
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    if (key.equals(pollingIntervalPrefKey)) {
+      schedule();
+    }
+  }
+
   private static class InstanceHolder {
 
     private static final PeriodicUpdateService INSTANCE = new PeriodicUpdateService();
@@ -67,10 +76,11 @@ public class PeriodicUpdateService {
     @NonNull
     @Override
     public Single<Result> createWork() {
-      if (getId().equals(PeriodicUpdateService.getInstance().request.getId())) {
-        return PeriodicUpdateService.getInstance().quoteRepository.fetch()
+      PeriodicUpdateService service = PeriodicUpdateService.getInstance();
+      if (getId().equals(service.request.getId())) {
+        return service.quoteRepository.fetch()
             .andThen(Single.fromCallable(() -> {
-              PeriodicUpdateService.getInstance().schedule();
+              service.schedule();
               return Result.success();
             }));
       } else {
